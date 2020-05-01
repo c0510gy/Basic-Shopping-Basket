@@ -29,17 +29,21 @@ class ItemList extends Component {
         this.rate = 0.001;
     }
 
-    itemClicked = event => {
+    itemAdd = event => {
         const idx = event.target.getAttribute('id');
-        if(this.selected[idx]) {
-            this.props.removeItem(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'primary')
-        }else {
-            this.props.addItems(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'secondary')
-        }
+        this.props.addItems(this.state.items[idx].price);
+        this.selected[idx] += 1
+    }
 
-        this.selected[idx] = !this.selected[idx];
+    itemRemove = event => {
+        const idx = event.target.getAttribute('id');
+        if(this.selected[idx] == 0)
+            alert('1개도 없어요!');
+        else
+        {
+            this.props.removeItem(this.state.items[idx].price);
+            this.selected[idx] -= 1;
+        }
     }
 
     currencyConvert = async event => {
@@ -67,11 +71,12 @@ class ItemList extends Component {
                         <br />
                         <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
                     </Card.Text>
-                    <Button variant={
-                        this.selected[i] ? 'secondary' : 'primary'
-                    } id={i} onClick={this.itemClicked}>{
-                        this.selected[i] ? 'Remove from cart' : 'Add to cart'
-                    }</Button>
+                    
+                    <Button id={i} variant='primary' onClick={this.itemAdd}>Add this stuff</Button>
+                    <Card.Text>
+                        <NumberFormat value={this.selected[i]} displayType={'text'} thousandSeparator={true} prefix="담은 개수: " suffix="개" />
+                    </Card.Text>
+                    <Button id={i} variant='secondary' onClick={this.itemRemove}>Remove this stuff</Button>
                 </Card.Body>
                 </Card>
             </Col>
@@ -89,8 +94,8 @@ class ItemList extends Component {
                            const selected = [];
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(false);
-                               currency.push(false);
+                               selected.push(0);
+                               currency.push(0);
                            }
                            this.selected = selected;
                            this.setState({
