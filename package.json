@@ -1,0 +1,25 @@
+{
+  "name": "basic-shopping-basket",
+  "version": "1.0.0",
+  "description": "Basic shopping basket(cart) web application using React.js and GraphQL + Apollo for tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ty-kmu/Basic-Shopping-Basket.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ty-kmu/Basic-Shopping-Basket/issues"
+  },
+  "homepage": "https://github.com/ty-kmu/Basic-Shopping-Basket#readme",
+  "dependencies": {
+    "apollo-server-express": "^2.12.0",
+    "body-parser-graphql": "^1.1.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1"
+  }
+}
