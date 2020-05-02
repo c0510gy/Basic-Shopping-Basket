@@ -14,14 +14,15 @@ class ShoppingBasket extends Component {
         };
     }
 
-    addItem = price => {
+    addItem = (price, id) => {
         this.setState({
             numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
             totalPrice: this.state.totalPrice + price,
         });
+        alert(this.state.selected);
     }
 
-    removeItem = price => {
+    removeItem = (price, id) => {
         this.setState({
             numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
             totalPrice: this.state.totalPrice - price,
