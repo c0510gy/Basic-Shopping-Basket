@@ -24,25 +24,23 @@ class ItemList extends Component {
         this.state = {
             items: items,
             currency: currency,
+            selected: selected,
         };
-        this.selected = selected;
         this.rate = 0.001;
     }
 
     itemAdd = event => {
         const idx = event.target.getAttribute('id');
         this.props.addItems(this.state.items[idx].price);
-        this.selected[idx] += 1
+        this.state.selected[idx] += 1
     }
 
     itemRemove = event => {
         const idx = event.target.getAttribute('id');
-        if(this.selected[idx] == 0)
-            alert('1개도 없어요!');
-        else
+        if(this.state.selected[idx] != 0)
         {
             this.props.removeItem(this.state.items[idx].price);
-            this.selected[idx] -= 1;
+            this.state.selected[idx] -= 1;
         }
     }
 
@@ -74,7 +72,7 @@ class ItemList extends Component {
                     
                     <Button id={i} variant='primary' onClick={this.itemAdd}>Add this stuff</Button>
                     <Card.Text>
-                        <NumberFormat value={this.selected[i]} displayType={'text'} thousandSeparator={true} prefix="담은 개수: " suffix="개" />
+                        <NumberFormat value={this.state.selected[i]} displayType={'text'} thousandSeparator={true} prefix="담은 개수: " suffix="개" />
                     </Card.Text>
                     <Button id={i} variant='secondary' onClick={this.itemRemove}>Remove this stuff</Button>
                 </Card.Body>
@@ -97,10 +95,10 @@ class ItemList extends Component {
                                selected.push(0);
                                currency.push(0);
                            }
-                           this.selected = selected;
                            this.setState({
                                items: data.getItems,
                                currency: currency,
+                               selected: selected,
                            });
                        }}>
                     {({loading, error, data}) => {
