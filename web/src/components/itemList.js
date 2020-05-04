@@ -29,28 +29,36 @@ class ItemList extends Component {
         this.rate = 0.001;
     }
 
+    newArray = (arr, idx, val) => {
+        let new_arr = [];
+        for(let i = 0; i < arr.length; i++)
+            new_arr.push(arr[i]);
+        new_arr[idx] = val;
+        return new_arr;
+    }
+
     itemAdd = event => {
         const idx = event.target.getAttribute('id');
         this.props.addItems(this.state.items[idx].price);
-        this.state.selected[idx] += 1
+        this.setState({
+            selected: this.newArray(this.state.selected, idx, this.state.selected[idx] + 1),
+        });
     }
 
     itemRemove = event => {
         const idx = event.target.getAttribute('id');
         if(this.state.selected[idx] != 0) {
             this.props.removeItem(this.state.items[idx].price);
-            this.state.selected[idx] -= 1;
+            this.setState({
+                selected: this.newArray(this.state.selected, idx, this.state.selected[idx] - 1),
+            });
         }
     }
 
     currencyConvert = async event => {
         const idx = event.target.getAttribute('id');
-        const newCurrency = [];
-        for(let i = 0; i < this.state.currency.length; i++)
-            newCurrency.push(this.state.currency[i]);
-        newCurrency[idx] = !newCurrency[idx];
         this.setState({
-            currency: newCurrency,
+            currency: this.newArray(this.state.currency, idx, !this.state.currency[idx])
         });
         this.rate = (await getCurrencyRate('KRW', 'USD')).rates.USD;
     }
