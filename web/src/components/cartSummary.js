@@ -13,7 +13,6 @@ class CartSummary extends Component {
         return (
             <div>
                 총 {this.props.numberOfSelectedItems}개 제품 선택 됨
-                {this.items}
                 <br /><br />
                 <NumberFormat value={this.props.totalPrice} displayType={'text'} thousandSeparator={true} prefix={'₩'} />
             </div>
