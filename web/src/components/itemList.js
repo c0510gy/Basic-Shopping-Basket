@@ -37,8 +37,7 @@ class ItemList extends Component {
 
     itemRemove = event => {
         const idx = event.target.getAttribute('id');
-        if(this.state.selected[idx] != 0)
-        {
+        if(this.state.selected[idx] != 0) {
             this.props.removeItem(this.state.items[idx].price);
             this.state.selected[idx] -= 1;
         }
@@ -93,7 +92,7 @@ class ItemList extends Component {
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
                                selected.push(0);
-                               currency.push(0);
+                               currency.push(false);
                            }
                            this.setState({
                                items: data.getItems,
