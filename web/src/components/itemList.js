@@ -24,32 +24,41 @@ class ItemList extends Component {
         this.state = {
             items: items,
             currency: currency,
+            selected: selected,
         };
-        this.selected = selected;
         this.rate = 0.001;
     }
 
-    itemClicked = event => {
-        const idx = event.target.getAttribute('id');
-        if(this.selected[idx]) {
-            this.props.removeItem(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'primary')
-        }else {
-            this.props.addItems(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'secondary')
-        }
+    newArray = (arr, idx, val) => {
+        let new_arr = [];
+        for(let i = 0; i < arr.length; i++)
+            new_arr.push(arr[i]);
+        new_arr[idx] = val;
+        return new_arr;
+    }
 
-        this.selected[idx] = !this.selected[idx];
+    itemAdd = event => {
+        const idx = event.target.getAttribute('id');
+        this.props.addItems(this.state.items[idx].price);
+        this.setState({
+            selected: this.newArray(this.state.selected, idx, this.state.selected[idx] + 1),
+        });
+    }
+
+    itemRemove = event => {
+        const idx = event.target.getAttribute('id');
+        if(this.state.selected[idx] != 0) {
+            this.props.removeItem(this.state.items[idx].price);
+            this.setState({
+                selected: this.newArray(this.state.selected, idx, this.state.selected[idx] - 1),
+            });
+        }
     }
 
     currencyConvert = async event => {
         const idx = event.target.getAttribute('id');
-        const newCurrency = [];
-        for(let i = 0; i < this.state.currency.length; i++)
-            newCurrency.push(this.state.currency[i]);
-        newCurrency[idx] = !newCurrency[idx];
         this.setState({
-            currency: newCurrency,
+            currency: this.newArray(this.state.currency, idx, !this.state.currency[idx])
         });
         this.rate = (await getCurrencyRate('KRW', 'USD')).rates.USD;
     }
@@ -67,11 +76,12 @@ class ItemList extends Component {
                         <br />
                         <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
                     </Card.Text>
-                    <Button variant={
-                        this.selected[i] ? 'secondary' : 'primary'
-                    } id={i} onClick={this.itemClicked}>{
-                        this.selected[i] ? 'Remove from cart' : 'Add to cart'
-                    }</Button>
+                    
+                    <Button id={i} variant='primary' onClick={this.itemAdd}>Add this stuff</Button>
+                    <Card.Text>
+                        <NumberFormat value={this.state.selected[i]} displayType={'text'} thousandSeparator={true} prefix="담은 개수: " suffix="개" />
+                    </Card.Text>
+                    <Button id={i} variant='secondary' onClick={this.itemRemove}>Remove this stuff</Button>
                 </Card.Body>
                 </Card>
             </Col>
@@ -89,13 +99,13 @@ class ItemList extends Component {
                            const selected = [];
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(false);
+                               selected.push(0);
                                currency.push(false);
                            }
-                           this.selected = selected;
                            this.setState({
                                items: data.getItems,
                                currency: currency,
+                               selected: selected,
                            });
                        }}>
                     {({loading, error, data}) => {
