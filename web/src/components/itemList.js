@@ -42,7 +42,7 @@ class ItemList extends Component {
     }
 
     itemNumber = event => {
-        // 구현 예정
+        // todo (taeyun): make date for reciept function
     }
 
     currencyConvert = async event => {
@@ -71,10 +71,6 @@ class ItemList extends Component {
                                 <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
                             </Card.Text>
 
-                            {/*<ButtonGroup>*/}
-                            {/*    <Button  id={i} onClick={this.itemMinus} disabled={!this.selected[i]} variant='secondary'>-</Button>*/}
-                            {/*    <Button  id={i} onClick={this.itemPlus} variant='primary'>+</Button>*/}
-                            {/*</ButtonGroup>*/}
                             <InputGroup>
                                 <InputGroup.Append>
                                     <Button id={i} onClick={this.itemMinus} disabled={!this.selected[i]} variant='secondary'>-</Button>
@@ -104,7 +100,7 @@ class ItemList extends Component {
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
                                selected.push(0);
-                               currency.push(0);
+                               currency.push(false);
                            }
                            this.selected = selected;
                            this.setState({
