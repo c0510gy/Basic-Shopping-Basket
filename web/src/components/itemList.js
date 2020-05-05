@@ -19,29 +19,23 @@ class ItemList extends Component {
         super(props);
 
         const items = [];
-        const selected = [];
         const currency = [];
         this.state = {
             items: items,
             currency: currency,
         };
-        this.selected = selected;
         this.rate = 0.001;
     }
 
     addItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        this.selected[idx]++;
         this.props.addItems(this.state.items[idx].price, idx);
-        event.target.setAttribute('variant', 'primary')
     }
 
     removeItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        if(this.selected[idx]) {
-            this.selected[idx]--;
+        if(this.props.countById(idx)) {
             this.props.removeItem(this.state.items[idx].price, idx);
-            event.target.setAttribute('variant', 'primary')
         } else {
             alert("물건을 -1개로 만드는 것은 불가능하다고 생각합니다. ");
         }
@@ -82,8 +76,8 @@ class ItemList extends Component {
                     } id={i} onClick={this.removeItemClicked}>{
                         'Remove from cart'
                     }</Button>
-                    <br></br>
-                    개수: {this.selected[i]}
+                    <br />
+                    개수: {this.props.countById(i)}
                 </Card.Body>
                 </Card>
             </Col>
@@ -102,9 +96,9 @@ class ItemList extends Component {
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
                                selected.push(0);
-                               currency.push(0);
+                               currency.push(false);
                            }
-                           this.selected = selected;
+                           this.props.setSelected(selected);
                            this.setState({
                                items: data.getItems,
                                currency: currency,
