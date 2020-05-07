@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {gql} from 'apollo-boost';
 import {Query} from "react-apollo";
-import {Container, Row, Col, Card, Button, ButtonGroup, InputGroup, FormControl} from 'react-bootstrap';
+import {Container, Row, Col, Card, Button, InputGroup, FormControl} from 'react-bootstrap';
 import {getCurrencyRate} from 'currencies-exchange-rates';
 import NumberFormat from "react-number-format";
 
@@ -21,24 +21,32 @@ class ItemList extends Component {
         const items = [];
         const selected = [];
         const currency = [];
+
         this.state = {
             items: items,
             currency: currency,
+            selected: selected,
         };
-        this.selected = selected;
+
         this.rate = 0.001;
     }
 
     itemPlus = event => {
         const idx = event.target.getAttribute('id');
         this.props.addItems(this.state.items[idx].price);
-        this.selected[idx] += 1;
+
+        let selected2 = [...this.state.selected];
+        selected2[idx]++;
+        this.setState({ selected: selected2 });
     }
 
     itemMinus = event => {
         const idx = event.target.getAttribute('id');
         this.props.removeItem(this.state.items[idx].price);
-        this.selected[idx] -= 1;
+
+        let selected2 = [...this.state.selected];
+        selected2[idx]--;
+        this.setState({ selected: selected2 });
     }
 
     itemNumber = event => {
@@ -69,17 +77,19 @@ class ItemList extends Component {
                                 <NumberFormat value={this.state.items[i].price * (this.state.currency[i] ? this.rate : 1)} displayType={'text'} thousandSeparator={true} prefix={this.state.currency[i] ? '$' : '₩'} />
                                 <br />
                                 <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
+                                
                             </Card.Text>
-
+                            
                             <InputGroup>
                                 <InputGroup.Append>
-                                    <Button id={i} onClick={this.itemMinus} disabled={!this.selected[i]} variant='secondary'>-</Button>
+                                    <Button id={i} onClick={this.itemMinus} disabled={!this.state.selected[i]} variant='secondary'>-</Button>
                                 </InputGroup.Append>
-                                <FormControl id={i}
-                                    placeholder={this.selected[i]+"개"}
+                                
+                                <FormControl readOnly
+                                   value={this.state.selected[i] + "개"}
                                 />
                                 <InputGroup.Append>
-                                    <Button  id={i} onClick={this.itemPlus} variant='primary'>+</Button>
+                                    <Button id={i} onClick={this.itemPlus} variant='primary'>+</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                         </Card.Body>
@@ -88,6 +98,7 @@ class ItemList extends Component {
             );
         }
         console.log(cards);
+        console.log(this.state.selected);
         return cards;
     }
 
@@ -106,6 +117,7 @@ class ItemList extends Component {
                            this.setState({
                                items: data.getItems,
                                currency: currency,
+                               selected: selected,
                            });
                        }}>
                     {({loading, error, data}) => {
