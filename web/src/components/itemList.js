@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {gql} from 'apollo-boost';
 import {Query} from "react-apollo";
-import {Container, Row, Col, Card, Button} from 'react-bootstrap';
+import {Container, Row, Col, Card, Button, InputGroup, FormControl} from 'react-bootstrap';
 import {getCurrencyRate} from 'currencies-exchange-rates';
 import NumberFormat from "react-number-format";
 
@@ -21,25 +21,40 @@ class ItemList extends Component {
         const items = [];
         const selected = [];
         const currency = [];
+
         this.state = {
             items: items,
             currency: currency,
+            selected: selected,
         };
-        this.selected = selected;
+
         this.rate = 0.001;
     }
 
-    itemClicked = event => {
+    itemPlus = event => {
         const idx = event.target.getAttribute('id');
-        if(this.selected[idx]) {
-            this.props.removeItem(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'primary')
-        }else {
-            this.props.addItems(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'secondary')
-        }
+        this.props.addItems(this.state.items[idx].price);
 
-        this.selected[idx] = !this.selected[idx];
+        let selected2 = [...this.state.selected];
+        selected2[idx]++;
+        this.setState({
+            selected: selected2
+        });
+    }
+
+    itemMinus = event => {
+        const idx = event.target.getAttribute('id');
+        this.props.removeItem(this.state.items[idx].price);
+
+        let selected2 = [...this.state.selected];
+        selected2[idx]--;
+        this.setState({
+            selected: selected2 
+        });
+    }
+
+    itemNumber = event => {
+        // todo (taeyun): make date for reciept function
     }
 
     currencyConvert = async event => {
@@ -58,26 +73,36 @@ class ItemList extends Component {
         const cards = [];
         for(let i = 0; i < this.state.items.length; i++){
             cards.push(<Col sm={6}>
-                <Card style={{ marginBottom: '10px' }}>
-                    <Card.Img variant="top" src={this.state.items[i].imgUrl} style={{width: '100%', height: '20vw', objectFit: 'cover'}} />
-                <Card.Body>
-                    <Card.Title>{this.state.items[i].name}</Card.Title>
-                    <Card.Text>
-                        <NumberFormat value={this.state.items[i].price * (this.state.currency[i] ? this.rate : 1)} displayType={'text'} thousandSeparator={true} prefix={this.state.currency[i] ? '$' : '₩'} />
-                        <br />
-                        <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
-                    </Card.Text>
-                    <Button variant={
-                        this.selected[i] ? 'secondary' : 'primary'
-                    } id={i} onClick={this.itemClicked}>{
-                        this.selected[i] ? 'Remove from cart' : 'Add to cart'
-                    }</Button>
-                </Card.Body>
-                </Card>
-            </Col>
+                    <Card style={{ marginBottom: '10px' }}>
+                        <Card.Img variant="top" src={this.state.items[i].imgUrl} style={{width: '100%', height: '20vw', objectFit: 'cover'}} />
+                        <Card.Body>
+                            <Card.Title>{this.state.items[i].name}</Card.Title>
+                            <Card.Text>
+                                <NumberFormat value={this.state.items[i].price * (this.state.currency[i] ? this.rate : 1)} displayType={'text'} thousandSeparator={true} prefix={this.state.currency[i] ? '$' : '₩'} />
+                                <br />
+                                <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
+                                
+                            </Card.Text>
+                            
+                            <InputGroup>
+                                <InputGroup.Append>
+                                    <Button id={i} onClick={this.itemMinus} disabled={!this.state.selected[i]} variant='secondary'>-</Button>
+                                </InputGroup.Append>
+                                
+                                <FormControl readOnly
+                                   value={this.state.selected[i] + "개"}
+                                />
+                                <InputGroup.Append>
+                                    <Button id={i} onClick={this.itemPlus} variant='primary'>+</Button>
+                                </InputGroup.Append>
+                            </InputGroup>
+                        </Card.Body>
+                    </Card>
+                </Col>
             );
         }
         console.log(cards);
+        console.log(this.state.selected);
         return cards;
     }
 
@@ -89,13 +114,14 @@ class ItemList extends Component {
                            const selected = [];
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(false);
+                               selected.push(0);
                                currency.push(false);
                            }
                            this.selected = selected;
                            this.setState({
                                items: data.getItems,
                                currency: currency,
+                               selected: selected,
                            });
                        }}>
                     {({loading, error, data}) => {
