@@ -37,7 +37,9 @@ class ItemList extends Component {
 
         let selected2 = [...this.state.selected];
         selected2[idx]++;
-        this.setState({ selected: selected2 });
+        this.setState({
+            selected: selected2
+        });
     }
 
     itemMinus = event => {
@@ -46,7 +48,9 @@ class ItemList extends Component {
 
         let selected2 = [...this.state.selected];
         selected2[idx]--;
-        this.setState({ selected: selected2 });
+        this.setState({
+            selected: selected2 
+        });
     }
 
     itemNumber = event => {
