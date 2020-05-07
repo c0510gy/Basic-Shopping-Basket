@@ -8,24 +8,47 @@ class ShoppingBasket extends Component {
     constructor(props) {
         super(props);
 
+        const selected = [];
+
         this.state = {
             numberOfSelectedItems: 0,
             totalPrice: 0,
+            selected: selected,
         };
     }
 
-    addItem = price => {
+    addItem = (price, id) => {
+        const selected = [];
+        for(let i=0; i<this.state.selected.length; i++){
+            selected.push(this.countById(i) + (i==id?1:0));
+        }
         this.setState({
             numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
             totalPrice: this.state.totalPrice + price,
+            selected: selected,
         });
     }
 
-    removeItem = price => {
+    removeItem = (price, id) => {
+        const selected = [];
+        for(let i=0; i<this.state.selected.length; i++){
+            selected.push(this.countById(i) - (i==id?1:0));
+        }
         this.setState({
             numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
             totalPrice: this.state.totalPrice - price,
+            selected: selected,
         });
+    }
+
+    countById = id => {
+        return this.state.selected[id];
+    }
+
+    setSelected = selected => {
+        this.setState({
+            selected: selected
+        })
     }
 
     render() {
@@ -38,7 +61,9 @@ class ShoppingBasket extends Component {
                         height: '100vh'}}>
                         <div style={{width: '80%', overflowY: 'scroll'}}>
                             <ItemList addItems={this.addItem}
-                                      removeItem={this.removeItem}/>
+                                      removeItem={this.removeItem}
+                                      countById={this.countById}
+                                      setSelected={this.setSelected}/>
                         </div>
                         <div style={{flex: 1,
                             display: 'flex',
@@ -46,7 +71,8 @@ class ShoppingBasket extends Component {
                             alignItems: 'center',
                             textAlign: 'center'}}>
                             <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
-                                         totalPrice={this.state.totalPrice}/>
+                                         totalPrice={this.state.totalPrice}
+                                         countById={this.countById}/>
                         </div>
                     </div>
                 </Row>
