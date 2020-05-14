@@ -1,7 +1,7 @@
 import {
     ApolloClient,
-    ApolloLink,
-    concat,
+    // ApolloLink,
+    // concat,
     HttpLink,
     InMemoryCache,
 } from 'apollo-boost';
@@ -17,7 +17,7 @@ const httpLink = new HttpLink({
 
 const client = new ApolloClient({
     link: httpLink,
-    cache: new InMemoryCache,
+    cache: new InMemoryCache(),
 });
 
 function App() {
