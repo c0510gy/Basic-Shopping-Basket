@@ -7,6 +7,7 @@ const itemsAttributes = [
     'name',
     'price',
     'imgUrl',
+    'selected',
 ];
 
 class ItemAPI extends DataSource {
@@ -26,7 +27,7 @@ class ItemAPI extends DataSource {
         if (!itemsAttributes.includes(attributeName)) {
             throw new Error('attributeNameIsNotValidMessage');
         }
-        const item = await this.store.Items.findOne({
+        const item = await this.store.Items.dataValues.findOne({
             where: {id: id},
             attributes: [attributeName],
             raw: true,
@@ -38,11 +39,18 @@ class ItemAPI extends DataSource {
     async getAllItems() {
         const items = await this.store.Items.findAll();
         const ret = [];
+
         for(let i = 0; i < items.length; i++){
-            ret.push(items[i].dataValues);
+            ret.push(items[i]);
         }
+
         return ret;
     }
+
+    setSelected(id, selected) {
+        this.store.Items.update({selected: selected}, {where: {id: id}});
+    }
+
 }
 
 module.exports={
