@@ -7,6 +7,7 @@ const itemsAttributes = [
     'name',
     'price',
     'imgUrl',
+    'select',
 ];
 
 class ItemAPI extends DataSource {
@@ -43,6 +44,12 @@ class ItemAPI extends DataSource {
         }
         return ret;
     }
+    
+    // async SaveItems(name, price, imgUrl, select){
+    //     for(let i = 0; i < 6; i++){
+    //         select
+    //     }
+    // }    
 }
 
 module.exports={

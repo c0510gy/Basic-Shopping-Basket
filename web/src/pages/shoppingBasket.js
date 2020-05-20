@@ -50,11 +50,14 @@ class ShoppingBasket extends Component {
             totalPrice: this.state.totalPrice - price,
             selected: selected2,
         });
-        
     }
 
     returnStatusByIdx = (idx) => {
         return this.state.selected[idx];
+    }
+
+    returnStatusArr = () => {
+        return this.state.selected;
     }
 
     returnItemNameByIdx = (idx) => {
@@ -96,7 +99,8 @@ class ShoppingBasket extends Component {
                                          selected={this.state.selected}
                                          returnStatusByIdx={this.returnStatusByIdx}
                                          returnItemNameByIdx={this.returnItemNameByIdx}
-                                         returnItemPriceByIdx={this.returnItemPriceByIdx}/>
+                                         returnItemPriceByIdx={this.returnItemPriceByIdx}
+                                         returnStatusArr={this.returnStatusArr}/>
                         </div>
                     </div>
                 </Row>

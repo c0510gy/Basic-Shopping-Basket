@@ -10,7 +10,8 @@ const GET_ITEMS_QUERY = gql`
         getItems{
             name,
             price,
-            imgUrl
+            imgUrl,
+            select,
         }
     }`;
 
@@ -98,7 +99,7 @@ class ItemList extends Component {
                            const currency = [];
                            
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(0);
+                               selected.push(data.getItems[i].select);
                                currency.push(false);
                            }
 
