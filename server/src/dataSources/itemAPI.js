@@ -44,12 +44,7 @@ class ItemAPI extends DataSource {
         }
         return ret;
     }
-    
-    // async SaveItems(name, price, imgUrl, select){
-    //     for(let i = 0; i < 6; i++){
-    //         select
-    //     }
-    // }    
+
 }
 
 module.exports={
