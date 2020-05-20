@@ -45,12 +45,10 @@ class CartSummary extends Component {
                     <this.itemCard />                
                 </ListGroup>
 
-                {/* <Mutation mutation={POST_MUTATION} variables={{ description, url }}>
-                    {postMutation => <button onClick={postMutation}>Submit</button>}
-                </Mutation> */}
-
                 <Mutation mutation={SET_SELECT_MUTATION} variables={{selected: this.props.returnStatusArr}}>
-                    {postMutation => <Button onClick={postMutation}>Submit</Button>}
+                    {postMutation => 
+                        <Button onClick={postMutation}>Submit</Button>
+                    }
                 </Mutation>
             </div>
         );

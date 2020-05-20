@@ -45,6 +45,9 @@ class ItemAPI extends DataSource {
         return ret;
     }
 
+    async setMutation() {
+        await this.store.Items.update({select: selected[idx]});
+    }
 }
 
 module.exports={
