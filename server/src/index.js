@@ -13,13 +13,14 @@ const context = async ({ req }) => {
     await createMockStore(store);
 };
 
-const api = new ItemAPI(store);
+const itemApi = new ItemAPI(store);
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     dataSources: () => ({
-        itemAPI: api,
+        itemAPI: itemApi,
+
     }),
     context,
 });

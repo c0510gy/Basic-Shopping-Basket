@@ -47,10 +47,6 @@ const createMockStore = async (store) => {
     const items = await store.Items.findAll();
 
     if(items.length == 0) {
-        await store.Items.destroy({
-            where: {},
-            truncate: true
-        });
         for (let i = 0; i < mockItems.length; i++)
             await store.Items.create(mockItems[i]);
         console.log("new create success");

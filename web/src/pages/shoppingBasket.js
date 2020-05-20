@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-
 import ItemList from '../components/itemList';
 import CartSummary from '../components/cartSummary'
-import {gql} from "apollo-boost";
 
 class ShoppingBasket extends Component {
     constructor(props) {

@@ -27,7 +27,7 @@ class ItemAPI extends DataSource {
         if (!itemsAttributes.includes(attributeName)) {
             throw new Error('attributeNameIsNotValidMessage');
         }
-        const item = await this.store.Items.dataValues.findOne({
+        const item = await this.store.Items.findOne({
             where: {id: id},
             attributes: [attributeName],
             raw: true,
@@ -41,14 +41,14 @@ class ItemAPI extends DataSource {
         const ret = [];
 
         for(let i = 0; i < items.length; i++){
-            ret.push(items[i]);
+            ret.push(items[i].dataValues);
         }
 
         return ret;
     }
 
-    setSelected(id, selected) {
-        this.store.Items.update({selected: selected}, {where: {id: id}});
+    async setSelected(id, selected) {
+        await this.store.Items.update({selected: selected}, {where: {id: id}});
     }
 
 }

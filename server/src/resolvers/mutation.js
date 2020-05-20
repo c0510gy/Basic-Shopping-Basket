@@ -1,7 +1,7 @@
 module.exports.Mutation = {
-    updateSelected: (parent, args, context) => {
+    updateSelected: async (parent, args, context) => {
         for (let i = 0; i < args.selected.length; i++) {
-            context.dataSources.itemAPI.setSelected(i+1, args.selected[i]);
+            await context.dataSources.itemAPI.setSelected(i+1, args.selected[i]);
         }
         return true;
     },
