@@ -7,8 +7,9 @@ module.exports.Query = {
                 name: items[i].name,
                 price: items[i].price,
                 imgUrl: items[i].imgUrl,
+                select: items[i].select,
             });
         }
         return ret;
-    },
+    }
 };

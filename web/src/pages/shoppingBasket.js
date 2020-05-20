@@ -11,6 +11,7 @@ class ShoppingBasket extends Component {
         this.state = {
             numberOfSelectedItems: 0,
             totalPrice: 0,
+            ItemInfo: [],
         };
     }
 
@@ -28,6 +29,21 @@ class ShoppingBasket extends Component {
         });
     }
 
+    updateInfo = (items, selected) => {
+        let newInfo = [];
+        for(let i = 0; i < items.length; i++) {
+            newInfo.push({
+                name: items[i].name,
+                price: items[i].price,
+                select: selected[i],
+            });
+        }
+        this.setState({
+            ItemInfo: newInfo,
+        });
+        console.log("updateInfo: " + items, selected, this.state.ItemInfo);
+    }
+
     render() {
         return (
             <Container>
@@ -38,15 +54,17 @@ class ShoppingBasket extends Component {
                         height: '100vh'}}>
                         <div style={{width: '80%', overflowY: 'scroll'}}>
                             <ItemList addItems={this.addItem}
-                                      removeItem={this.removeItem}/>
+                                      removeItem={this.removeItem}
+                                      updateInfo={this.updateInfo}/>
                         </div>
                         <div style={{flex: 1,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            textAlign: 'center'}}>
+                            textAlign: 'center',
+                            overflowY: 'scroll'}}>
                             <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
-                                         totalPrice={this.state.totalPrice}/>
+                                         totalPrice={this.state.totalPrice} iteminfo={this.state.ItemInfo}/>
                         </div>
                     </div>
                 </Row>
