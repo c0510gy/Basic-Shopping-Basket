@@ -19,7 +19,7 @@ const server = new ApolloServer({
     dataSources: () => ({
         itemAPI: new ItemAPI(store),
     }),
-    context
+    context,
 });
 
 server.listen().then(({ url }) => {
