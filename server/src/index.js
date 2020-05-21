@@ -13,13 +13,16 @@ const context = async ({ req }) => {
     await createMockStore(store);
 };
 
+const itemApi = new ItemAPI(store);
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     dataSources: () => ({
-        itemAPI: new ItemAPI(store),
+        itemAPI: itemApi,
+
     }),
-    context
+    context,
 });
 
 server.listen().then(({ url }) => {

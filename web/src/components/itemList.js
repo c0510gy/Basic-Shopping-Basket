@@ -10,7 +10,8 @@ const GET_ITEMS_QUERY = gql`
         getItems{
             name,
             price,
-            imgUrl
+            imgUrl,
+            selected,
         }
     }`;
 
@@ -29,13 +30,13 @@ class ItemList extends Component {
 
     addItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        this.props.addItems(this.state.items[idx].price, idx);
+        this.props.addItems(idx);
     }
 
     removeItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        if(this.props.countById(idx)) {
-            this.props.removeItem(this.state.items[idx].price, idx);
+        if(this.props.countById("selected", idx)) {
+            this.props.removeItem(idx);
         } else {
             alert("물건을 -1개로 만드는 것은 불가능하다고 생각합니다. ");
         }
@@ -77,7 +78,7 @@ class ItemList extends Component {
                         'Remove from cart'
                     }</Button>
                     <br />
-                    개수: {this.props.countById(i)}
+                    개수: {this.props.countById("selected", i)}
                 </Card.Body>
                 </Card>
             </Col>
@@ -92,13 +93,17 @@ class ItemList extends Component {
             <div>
                 <Query query={GET_ITEMS_QUERY}
                        onCompleted={data => {
+                           const name = [];
                            const selected = [];
+                           const price = [];
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(0);
+                               name.push(data.getItems[i].name);
+                               selected.push(data.getItems[i].selected);
+                               price.push(data.getItems[i].price);
                                currency.push(false);
                            }
-                           this.props.setSelected(selected);
+                           this.props.setItemData(name, selected, price);
                            this.setState({
                                items: data.getItems,
                                currency: currency,
