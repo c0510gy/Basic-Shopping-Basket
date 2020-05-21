@@ -52,9 +52,8 @@ class ItemAPI extends DataSource {
                 select: ItemList[i].select
             }, {
                 where: {name: ItemList[i].name}
-            })
-        }
-        
+            });
+        }  
     }
 }
 

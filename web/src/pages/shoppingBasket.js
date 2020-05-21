@@ -9,28 +9,12 @@ class ShoppingBasket extends Component {
         super(props);
 
         this.state = {
-            numberOfSelectedItems: 0,
-            totalPrice: 0,
             ItemInfo: [],
         };
     }
 
-    addItem = price => {
-        this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
-            totalPrice: this.state.totalPrice + price,
-        });
-    }
-
-    removeItem = price => {
-        this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
-            totalPrice: this.state.totalPrice - price,
-        });
-    }
-
     updateInfo = (items, selected) => {
-        let newInfo = [];
+        const newInfo = [];
         for(let i = 0; i < items.length; i++) {
             newInfo.push({
                 name: items[i].name,
@@ -41,7 +25,6 @@ class ShoppingBasket extends Component {
         this.setState({
             ItemInfo: newInfo,
         });
-        console.log("updateInfo: " + items, selected, this.state.ItemInfo);
     }
 
     render() {
@@ -53,9 +36,7 @@ class ShoppingBasket extends Component {
                         flexDirection: 'row',
                         height: '100vh'}}>
                         <div style={{width: '80%', overflowY: 'scroll'}}>
-                            <ItemList addItems={this.addItem}
-                                      removeItem={this.removeItem}
-                                      updateInfo={this.updateInfo}/>
+                            <ItemList updateInfo={this.updateInfo}/>
                         </div>
                         <div style={{flex: 1,
                             display: 'flex',
@@ -63,8 +44,7 @@ class ShoppingBasket extends Component {
                             alignItems: 'center',
                             textAlign: 'center',
                             overflowY: 'scroll'}}>
-                            <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
-                                         totalPrice={this.state.totalPrice} iteminfo={this.state.ItemInfo}/>
+                            <CartSummary iteminfo={this.state.ItemInfo}/>
                         </div>
                     </div>
                 </Row>

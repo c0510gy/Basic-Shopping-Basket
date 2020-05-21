@@ -48,7 +48,7 @@ const createMockStore = async (store) => {
         await store.Items.findOrCreate({
             where: { name: mockItems[i].name },
             defaults: mockItems[i],
-          })
+        });
 };
 
 module.exports = {
