@@ -7,6 +7,7 @@ const itemsAttributes = [
     'name',
     'price',
     'imgUrl',
+    'select',
 ];
 
 class ItemAPI extends DataSource {
@@ -42,6 +43,10 @@ class ItemAPI extends DataSource {
             ret.push(items[i].dataValues);
         }
         return ret;
+    }
+
+    async setMutation(select, id) {
+        await this.store.Items.update({select: select}, {where: {id: id+1}});
     }
 }
 

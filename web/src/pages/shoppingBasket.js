@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container, Row} from 'react-bootstrap';
 
 import ItemList from '../components/itemList';
 import CartSummary from '../components/cartSummary'
@@ -8,23 +8,50 @@ class ShoppingBasket extends Component {
     constructor(props) {
         super(props);
 
+        const itemName = [];
+        const itemPrice = [];
+        const selected = [];
+
         this.state = {
-            numberOfSelectedItems: 0,
-            totalPrice: 0,
+            itemName: itemName,
+            itemPrice: itemPrice,
+            selected: selected,
         };
     }
 
-    addItem = price => {
+    addItem = (idx) => {
+        const newSelected = [...this.state.selected];
+        newSelected[idx]++;
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
-            totalPrice: this.state.totalPrice + price,
+            selected: newSelected,
         });
     }
 
-    removeItem = price => {
+    removeItem = (idx) => {
+        const newSelected = [...this.state.selected];
+        newSelected[idx]--;
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
-            totalPrice: this.state.totalPrice - price,
+            selected: newSelected,
+        });
+    }
+
+    returnItemNameByIdx = (idx) => {
+        return this.state.itemName[idx];
+    }
+
+    returnItemPriceByIdx = (idx) => {
+        return this.state.itemPrice[idx];
+    }
+
+    returnSelectedByIdx = (idx) => {
+        return this.state.selected[idx];
+    }
+
+    initItemArr = (itemName, itemPrice, selected) => {
+        this.setState({
+            itemName: itemName,
+            itemPrice: itemPrice,
+            selected: selected,
         });
     }
 
@@ -38,15 +65,21 @@ class ShoppingBasket extends Component {
                         height: '100vh'}}>
                         <div style={{width: '80%', overflowY: 'scroll'}}>
                             <ItemList addItems={this.addItem}
-                                      removeItem={this.removeItem}/>
+                                      removeItem={this.removeItem}
+                                      returnItemNameByIdx={this.returnItemNameByIdx}
+                                      returnItemPriceByIdx={this.returnItemPriceByIdx}
+                                      returnSelectedByIdx={this.returnSelectedByIdx}
+                                      initItemArr={this.initItemArr}/>
                         </div>
                         <div style={{flex: 1,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             textAlign: 'center'}}>
-                            <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
-                                         totalPrice={this.state.totalPrice}/>
+                            <CartSummary returnSelectedByIdx={this.returnSelectedByIdx}
+                                         returnItemNameByIdx={this.returnItemNameByIdx}
+                                         returnItemPriceByIdx={this.returnItemPriceByIdx}
+                                         returnArrLen={this.state.selected.length}/>
                         </div>
                     </div>
                 </Row>

@@ -10,7 +10,8 @@ const GET_ITEMS_QUERY = gql`
         getItems{
             name,
             price,
-            imgUrl
+            imgUrl,
+            select,
         }
     }`;
 
@@ -19,13 +20,11 @@ class ItemList extends Component {
         super(props);
 
         const items = [];
-        const selected = [];
         const currency = [];
 
         this.state = {
             items: items,
             currency: currency,
-            selected: selected,
         };
 
         this.rate = 0.001;
@@ -33,28 +32,12 @@ class ItemList extends Component {
 
     itemPlus = event => {
         const idx = event.target.getAttribute('id');
-        this.props.addItems(this.state.items[idx].price);
-
-        let selected2 = [...this.state.selected];
-        selected2[idx]++;
-        this.setState({
-            selected: selected2
-        });
+        this.props.addItems(idx, this.state.items[idx].price);
     }
 
     itemMinus = event => {
         const idx = event.target.getAttribute('id');
-        this.props.removeItem(this.state.items[idx].price);
-
-        let selected2 = [...this.state.selected];
-        selected2[idx]--;
-        this.setState({
-            selected: selected2 
-        });
-    }
-
-    itemNumber = event => {
-        // todo (taeyun): make date for reciept function
+        this.props.removeItem(idx, this.state.items[idx].price);
     }
 
     currencyConvert = async event => {
@@ -86,12 +69,13 @@ class ItemList extends Component {
                             
                             <InputGroup>
                                 <InputGroup.Append>
-                                    <Button id={i} onClick={this.itemMinus} disabled={!this.state.selected[i]} variant='secondary'>-</Button>
+                                    <Button id={i} onClick={this.itemMinus} disabled={!this.props.returnSelectedByIdx(i)} variant='secondary'>-</Button>
                                 </InputGroup.Append>
                                 
-                                <FormControl readOnly
-                                   value={this.state.selected[i] + "개"}
+                                <FormControl readOnly id={i}
+                                   value={this.props.returnSelectedByIdx(i) + "개"}
                                 />
+
                                 <InputGroup.Append>
                                     <Button id={i} onClick={this.itemPlus} variant='primary'>+</Button>
                                 </InputGroup.Append>
@@ -102,7 +86,6 @@ class ItemList extends Component {
             );
         }
         console.log(cards);
-        console.log(this.state.selected);
         return cards;
     }
 
@@ -111,17 +94,23 @@ class ItemList extends Component {
             <div>
                 <Query query={GET_ITEMS_QUERY}
                        onCompleted={data => {
+                           const itemName = [];
+                           const itemPrice = [];
                            const selected = [];
                            const currency = [];
+                           
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(0);
+                               itemName.push(data.getItems[i].name);
+                               itemPrice.push(data.getItems[i].price);
+                               selected.push(data.getItems[i].select);
                                currency.push(false);
                            }
-                           this.selected = selected;
+
+                           this.props.initItemArr(itemName, itemPrice, selected);
+                    
                            this.setState({
                                items: data.getItems,
                                currency: currency,
-                               selected: selected,
                            });
                        }}>
                     {({loading, error, data}) => {
