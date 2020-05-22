@@ -11,7 +11,7 @@ const typeDefs = gql`
         getItems: [Item]!
     }
     type Mutation {
-        postMutation(selected: [Int!]!): Boolean!
+        postMutation(selected: [Int]!): Boolean!
     }
 `;
 

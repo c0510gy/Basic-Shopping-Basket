@@ -43,14 +43,13 @@ const createMockStore = async (store) => {
             select: 0,
         },
     ];
-
-    await store.Items.destroy({
-        where: {},
-        truncate: true
-    });
-
+    
     for(let i = 0; i < mockItems.length; i++)
-        await store.Items.create(mockItems[i]);
+        await store.Items.findOrCreate({
+            where: {name: mockItems[i].name},
+            defaults: mockItems[i],
+    });
+    
 };
 
 module.exports = {
