@@ -71,10 +71,11 @@ class ItemList extends Component {
                                 <InputGroup.Append>
                                     <Button id={i} onClick={this.itemMinus} disabled={!this.props.returnSelectedByIdx(i)} variant='secondary'>-</Button>
                                 </InputGroup.Append>
-
+                                
                                 <FormControl readOnly id={i}
                                    value={this.props.returnSelectedByIdx(i) + "개"}
                                 />
+
                                 <InputGroup.Append>
                                     <Button id={i} onClick={this.itemPlus} variant='primary'>+</Button>
                                 </InputGroup.Append>

@@ -78,7 +78,8 @@ class ShoppingBasket extends Component {
                             textAlign: 'center'}}>
                             <CartSummary returnSelectedByIdx={this.returnSelectedByIdx}
                                          returnItemNameByIdx={this.returnItemNameByIdx}
-                                         returnItemPriceByIdx={this.returnItemPriceByIdx}/>
+                                         returnItemPriceByIdx={this.returnItemPriceByIdx}
+                                         returnArrLen={this.state.selected.length}/>
                         </div>
                     </div>
                 </Row>

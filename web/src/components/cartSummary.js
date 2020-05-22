@@ -20,7 +20,7 @@ class CartSummary extends Component {
 
     itemCard = () => {
         const listItem = [];
-        for(let i = 0; i < 6; i++){
+        for(let i = 0; i < this.props.returnArrLen; i++){
             if(this.props.returnSelectedByIdx(i) !== 0){
                 listItem.push(
                     <ListGroup.Item as="li">
@@ -38,7 +38,7 @@ class CartSummary extends Component {
 
     returnSelectedArr = () => {
         const tmpSelected = []
-        for(let i = 0; i < 6; i++){
+        for(let i = 0; i < this.props.returnArrLen; i++){
             tmpSelected.push(this.props.returnSelectedByIdx(i));
         }
         return tmpSelected;
@@ -49,7 +49,7 @@ class CartSummary extends Component {
         let numberOfSelectedItems = 0;
         let totalPrice = 0;
 
-        for(let i = 0; i < 6; i++){
+        for(let i = 0; i < this.props.returnArrLen; i++){
             numberOfSelectedItems += this.props.returnSelectedByIdx(i);
             totalPrice += (this.props.returnItemPriceByIdx(i) * this.props.returnSelectedByIdx(i));
         }
