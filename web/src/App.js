@@ -1,7 +1,5 @@
 import {
     ApolloClient,
-    // ApolloLink,
-    // concat,
     HttpLink,
     InMemoryCache,
 } from 'apollo-boost';

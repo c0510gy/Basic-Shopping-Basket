@@ -45,8 +45,8 @@ class ItemAPI extends DataSource {
         return ret;
     }
 
-    async setMutation() {
-        await this.store.Items.update({select: selected[idx]});
+    async setMutation(select, id) {
+        await this.store.Items.update({select: select}, {where: {id: id+1}});
     }
 }
 

@@ -8,56 +8,31 @@ class ShoppingBasket extends Component {
     constructor(props) {
         super(props);
 
-        const selected = [];
         const itemName = [];
         const itemPrice = [];
+        const selected = [];
 
         this.state = {
-            numberOfSelectedItems: 0,
-            totalPrice: 0,
-            selected: selected,
             itemName: itemName,
             itemPrice: itemPrice,
+            selected: selected,
         };
     }
 
-    addInfo = (idx, name, price) => {
-        let itemName2 = [...this.state.itemName];
-        let itemPrice2 = [...this.state.itemPrice];
-        itemName2[idx] = name;
-        itemPrice2[idx] = price;
+    addItem = (idx) => {
+        const newSelected = [...this.state.selected];
+        newSelected[idx]++;
         this.setState({
-            itemName: itemName2,
-            itemPrice: itemPrice2,
+            selected: newSelected,
         });
     }
 
-    addItem = (idx, price) => {
-        let selected2 = [...this.state.selected];
-        selected2[idx]++;
+    removeItem = (idx) => {
+        const newSelected = [...this.state.selected];
+        newSelected[idx]--;
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
-            totalPrice: this.state.totalPrice + price,
-            selected: selected2,
+            selected: newSelected,
         });
-    }
-
-    removeItem = (idx, price) => {
-        let selected2 = [...this.state.selected];
-        selected2[idx]--;
-        this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
-            totalPrice: this.state.totalPrice - price,
-            selected: selected2,
-        });
-    }
-
-    returnStatusByIdx = (idx) => {
-        return this.state.selected[idx];
-    }
-
-    returnStatusArr = () => {
-        return this.state.selected;
     }
 
     returnItemNameByIdx = (idx) => {
@@ -68,9 +43,15 @@ class ShoppingBasket extends Component {
         return this.state.itemPrice[idx];
     }
 
-    initSelected = selected0 => {
+    returnSelectedByIdx = (idx) => {
+        return this.state.selected[idx];
+    }
+
+    initItemArr = (itemName, itemPrice, selected) => {
         this.setState({
-            selected: selected0,
+            itemName: itemName,
+            itemPrice: itemPrice,
+            selected: selected,
         });
     }
 
@@ -85,22 +66,19 @@ class ShoppingBasket extends Component {
                         <div style={{width: '80%', overflowY: 'scroll'}}>
                             <ItemList addItems={this.addItem}
                                       removeItem={this.removeItem}
-                                      addInfo={this.addInfo}
-                                      returnStatusByIdx={this.returnStatusByIdx}
-                                      initSelected={this.initSelected}/>
+                                      returnItemNameByIdx={this.returnItemNameByIdx}
+                                      returnItemPriceByIdx={this.returnItemPriceByIdx}
+                                      returnSelectedByIdx={this.returnSelectedByIdx}
+                                      initItemArr={this.initItemArr}/>
                         </div>
                         <div style={{flex: 1,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             textAlign: 'center'}}>
-                            <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
-                                         totalPrice={this.state.totalPrice}
-                                         selected={this.state.selected}
-                                         returnStatusByIdx={this.returnStatusByIdx}
+                            <CartSummary returnSelectedByIdx={this.returnSelectedByIdx}
                                          returnItemNameByIdx={this.returnItemNameByIdx}
-                                         returnItemPriceByIdx={this.returnItemPriceByIdx}
-                                         returnStatusArr={this.returnStatusArr}/>
+                                         returnItemPriceByIdx={this.returnItemPriceByIdx}/>
                         </div>
                     </div>
                 </Row>

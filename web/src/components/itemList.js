@@ -33,7 +33,6 @@ class ItemList extends Component {
     itemPlus = event => {
         const idx = event.target.getAttribute('id');
         this.props.addItems(idx, this.state.items[idx].price);
-        this.props.addInfo(idx, this.state.items[idx].name, this.state.items[idx].price);
     }
 
     itemMinus = event => {
@@ -70,11 +69,11 @@ class ItemList extends Component {
                             
                             <InputGroup>
                                 <InputGroup.Append>
-                                    <Button id={i} onClick={this.itemMinus} disabled={!this.props.returnStatusByIdx(i)} variant='secondary'>-</Button>
+                                    <Button id={i} onClick={this.itemMinus} disabled={!this.props.returnSelectedByIdx(i)} variant='secondary'>-</Button>
                                 </InputGroup.Append>
 
                                 <FormControl readOnly id={i}
-                                   value={this.props.returnStatusByIdx(i) + "개"}
+                                   value={this.props.returnSelectedByIdx(i) + "개"}
                                 />
                                 <InputGroup.Append>
                                     <Button id={i} onClick={this.itemPlus} variant='primary'>+</Button>
@@ -86,7 +85,6 @@ class ItemList extends Component {
             );
         }
         console.log(cards);
-        // console.log(this.state.items);
         return cards;
     }
 
@@ -95,15 +93,19 @@ class ItemList extends Component {
             <div>
                 <Query query={GET_ITEMS_QUERY}
                        onCompleted={data => {
+                           const itemName = [];
+                           const itemPrice = [];
                            const selected = [];
                            const currency = [];
                            
                            for(let i = 0; i < data.getItems.length; i++) {
+                               itemName.push(data.getItems[i].name);
+                               itemPrice.push(data.getItems[i].price);
                                selected.push(data.getItems[i].select);
                                currency.push(false);
                            }
 
-                           this.props.initSelected(selected);
+                           this.props.initItemArr(itemName, itemPrice, selected);
                     
                            this.setState({
                                items: data.getItems,
