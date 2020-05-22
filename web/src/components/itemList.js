@@ -10,7 +10,8 @@ const GET_ITEMS_QUERY = gql`
         getItems{
             name,
             price,
-            imgUrl
+            imgUrl,
+            select,
         }
     }`;
 
@@ -37,20 +38,22 @@ class ItemList extends Component {
         return new_arr;
     }
 
-    itemAdd = event => {
+    itemAdd = (event) => {
         const idx = event.target.getAttribute('id');
-        this.props.addItems(this.state.items[idx].price);
+        let newSelectedArray = this.newArray(this.state.selected, idx, this.state.selected[idx] + 1);
+        this.props.updateInfo(this.state.items, newSelectedArray);
         this.setState({
-            selected: this.newArray(this.state.selected, idx, this.state.selected[idx] + 1),
+            selected: newSelectedArray,
         });
     }
 
-    itemRemove = event => {
+    itemRemove = (event) => {
         const idx = event.target.getAttribute('id');
         if(this.state.selected[idx] != 0) {
-            this.props.removeItem(this.state.items[idx].price);
+            let newSelectedArray = this.newArray(this.state.selected, idx, this.state.selected[idx] - 1);
+            this.props.updateInfo(this.state.items, newSelectedArray);
             this.setState({
-                selected: this.newArray(this.state.selected, idx, this.state.selected[idx] - 1),
+                selected: newSelectedArray,
             });
         }
     }
@@ -92,6 +95,8 @@ class ItemList extends Component {
     }
 
     render() {
+        const itemlist = [];
+        const sellist = [];
         return (
             <div>
                 <Query query={GET_ITEMS_QUERY}
@@ -99,9 +104,10 @@ class ItemList extends Component {
                            const selected = [];
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(0);
+                               selected.push(data.getItems[i].select);
                                currency.push(false);
                            }
+                           this.props.updateInfo(data.getItems, selected);
                            this.setState({
                                items: data.getItems,
                                currency: currency,

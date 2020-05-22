@@ -9,22 +9,21 @@ class ShoppingBasket extends Component {
         super(props);
 
         this.state = {
-            numberOfSelectedItems: 0,
-            totalPrice: 0,
+            ItemInfo: [],
         };
     }
 
-    addItem = price => {
+    updateInfo = (items, selected) => {
+        const newInfo = [];
+        for(let i = 0; i < items.length; i++) {
+            newInfo.push({
+                name: items[i].name,
+                price: items[i].price,
+                select: selected[i],
+            });
+        }
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
-            totalPrice: this.state.totalPrice + price,
-        });
-    }
-
-    removeItem = price => {
-        this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
-            totalPrice: this.state.totalPrice - price,
+            ItemInfo: newInfo,
         });
     }
 
@@ -37,16 +36,15 @@ class ShoppingBasket extends Component {
                         flexDirection: 'row',
                         height: '100vh'}}>
                         <div style={{width: '80%', overflowY: 'scroll'}}>
-                            <ItemList addItems={this.addItem}
-                                      removeItem={this.removeItem}/>
+                            <ItemList updateInfo={this.updateInfo}/>
                         </div>
                         <div style={{flex: 1,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            textAlign: 'center'}}>
-                            <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
-                                         totalPrice={this.state.totalPrice}/>
+                            textAlign: 'center',
+                            overflowY: 'scroll'}}>
+                            <CartSummary iteminfo={this.state.ItemInfo}/>
                         </div>
                     </div>
                 </Row>

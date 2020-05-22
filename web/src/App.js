@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ShoppingBasket from "./pages/shoppingBasket";
 
 const httpLink = new HttpLink({
-    uri: 'http://localhost:4000',
+    uri: 'http://localhost:4000/',
 });
 
 const client = new ApolloClient({

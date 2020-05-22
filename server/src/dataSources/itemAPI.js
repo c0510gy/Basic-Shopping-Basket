@@ -7,6 +7,7 @@ const itemsAttributes = [
     'name',
     'price',
     'imgUrl',
+    'select',
 ];
 
 class ItemAPI extends DataSource {
@@ -42,6 +43,17 @@ class ItemAPI extends DataSource {
             ret.push(items[i].dataValues);
         }
         return ret;
+    }
+
+    async updateItems(ItemList) {
+        for(let i = 0; i < ItemList.length; i++) {
+
+            await this.store.Items.update({
+                select: ItemList[i].select
+            }, {
+                where: {name: ItemList[i].name}
+            });
+        }  
     }
 }
 
