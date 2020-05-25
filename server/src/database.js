@@ -15,6 +15,8 @@ const createStore = (force=false) => {
     const Model = Sequelize.Model;
 
     class Items extends Model {}
+    class Users extends Model {}
+    class Selection extends Model {}
 
     Items.init({
         id: {
@@ -25,17 +27,49 @@ const createStore = (force=false) => {
         name: Sequelize.TEXT,
         price: Sequelize.INTEGER,
         imgUrl: Sequelize.TEXT,
-        selected: Sequelize.INTEGER,
     },
     {
         sequelize,
         modelName: 'Items',
     });
 
+    Users.init({
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        name: Sequelize.TEXT,
+        userID: Sequelize.TEXT,
+        password: Sequelize.TEXT,
+        token: Sequelize.TEXT,
+    },
+    {
+        sequelize,
+        modelName: 'Users',
+    });
+
+    Selection.init({
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        userID: Sequelize.TEXT,
+        itemID: Sequelize.INTEGER,
+        selected: Sequelize.INTEGER,
+    },
+    {
+        sequelize,
+        modelName: 'Selection',
+    });
+
     sequelize.sync({force: force});
 
     return {
         Items,
+        Users,
+        Selection,
         sequelize,
     };
 };

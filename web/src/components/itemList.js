@@ -6,8 +6,8 @@ import {getCurrencyRate} from 'currencies-exchange-rates';
 import NumberFormat from "react-number-format";
 
 const GET_ITEMS_QUERY = gql`
-    query {
-        getItems{
+    query tokenToItems($token: String!){
+        getItems(token: $token){
             name,
             price,
             imgUrl,
@@ -92,6 +92,7 @@ class ItemList extends Component {
         return (
             <div>
                 <Query query={GET_ITEMS_QUERY}
+                       variables={{token: localStorage.getItem("token")}}
                        onCompleted={data => {
                            const name = [];
                            const selected = [];
