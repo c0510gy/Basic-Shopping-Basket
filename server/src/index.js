@@ -20,7 +20,6 @@ const server = new ApolloServer({
     resolvers,
     dataSources: () => ({
         itemAPI: itemApi,
-
     }),
     context,
 });

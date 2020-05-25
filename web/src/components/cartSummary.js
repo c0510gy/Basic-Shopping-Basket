@@ -4,8 +4,13 @@ import {Mutation} from "react-apollo";
 import NumberFormat from 'react-number-format';
 
 const SET_ITEMS_MUTATION = gql`
-    mutation updateMutation($selected: [Int]!){
-        updateSelected(selected: $selected)
+    mutation updateSelected($token: String!, $selected: [Int]!){
+        save(token: $token, selected: $selected)
+    }`;
+
+const LOGOUT_MUTATION = gql`
+    mutation logoutMutation($token: String!){
+        logout(token: $token)
     }`;
 
 class CartSummary extends Component {
@@ -57,9 +62,25 @@ class CartSummary extends Component {
                 합계: <NumberFormat value={this.getTotalPrice()} displayType={'text'} thousandSeparator={true} /> 원
                 <br />
 
-                <Mutation mutation={SET_ITEMS_MUTATION} variables={{selected: this.getSelected()}}>
-                    {(updateSelected, {data, called}) => {
-                        return (<button onClick={updateSelected}>Save!!</button>);
+                <Mutation mutation={SET_ITEMS_MUTATION} variables={{token: localStorage.getItem("token"), selected: this.getSelected()}}>
+                    {(save, {data, called}) => {
+                        return (<button onClick={save}>Save!!</button>);
+                    }}
+                </Mutation>
+                <br />
+
+                <Mutation mutation={LOGOUT_MUTATION}
+                          onCompleted={
+                              data => {
+                                  if(data.logout == true) {
+                                      localStorage.setItem("token", null);
+                                      window.location.href="/";
+                                  }
+                              }
+                          }
+                          variables={{token: localStorage.getItem("token")}}>
+                    {(logout, {data, called}) => {
+                        return (<button onClick={logout}>LogOut</button>);
                     }}
                 </Mutation>
 
