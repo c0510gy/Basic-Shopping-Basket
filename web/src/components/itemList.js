@@ -32,30 +32,19 @@ class ItemList extends Component {
     itemAdd = event => {
         const idx = event.target.getAttribute('id');
         var amt = parseInt(this.amount[idx].value);
-        if(isNaN(amt)) amt = 0;
-        alert(amt)
-        this.props.addItems(this.state.items[idx].price, amt, idx);
-        // amount[idx] = 10
-        // this.setState({
-        //     amount: amount
-        // }, () => alert(amount[idx] + '개 담았습니다'));
-        // this.state.amount[idx] = 10
-        // alert('asdf')
-        // conat amt = event.target.parentNode.getElementsByTagName('')
-        // const amt = event.
-        // if(this.selected[idx]) {
-        //     this.props.removeItem(this.state.items[idx].price);
-        //     event.target.setAttribute('variant', 'primary')
-        // }else {
-        //     this.props.addItems(this.state.items[idx].price);
-        //     event.target.setAttribute('variant', 'secondary')
-        // }
-
-        // this.selected[idx] = !this.selected[idx];
+        const items = this.state.items;
+        if(isNaN(amt)) alert("개수는 숫자로 입력하세요")
+        else if(amt < 0) alert("최소 1개 이상 담아야 합니다")
+        else this.props.addItems(this.state.items[idx].price, amt, idx);
     }
 
     itemRemove = event => {
-
+        const idx = event.target.getAttribute('id');
+        var amt = parseInt(this.amount[idx].value);
+        const items = this.state.items;
+        if(isNaN(amt)) alert("개수는 숫자로 입력하세요")
+        else if(amt < 0) alert("최소 1개 이상 담아야 합니다")
+        else this.props.removeItem(this.state.items[idx].price, amt, idx);
     }
 
     currencyConvert = async event => {
@@ -93,11 +82,6 @@ class ItemList extends Component {
                             <Button variant="secondary" id={i} onClick={this.itemRemove}>빼기</Button>
                         </InputGroup.Append>
                     </InputGroup>
-                    {/* <Button variant={
-                        this.selected[i] ? 'secondary' : 'primary'
-                    } id={i} onClick={this.itemClicked}>{
-                        this.selected[i] ? 'Remove from cart' : 'Add to cart'
-                    }</Button> */}
                 </Card.Body>
                 </Card>
             </Col>

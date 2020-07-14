@@ -9,22 +9,43 @@ class ShoppingBasket extends Component {
         super(props);
 
         this.state = {
-            numberOfSelectedItems: 0,
+            amountOfItems: [],
+            sumOfAmounts: 0,
             totalPrice: 0,
         };
     }
 
-    addItem = price => {
+    addItem = (price, amount, idx) => {
+        var amountOfItems = this.state.amountOfItems
+        var sumOfAmounts = this.state.sumOfAmounts
+        var totalPrice = this.state.totalPrice
+        if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
+        sumOfAmounts -= amountOfItems[idx]
+        totalPrice -= amountOfItems[idx] * price
+        amountOfItems[idx] = amountOfItems[idx] + amount
+        sumOfAmounts += amountOfItems[idx]
+        totalPrice += amountOfItems[idx] * price
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
-            totalPrice: this.state.totalPrice + price,
+            amountOfItems: amountOfItems,
+            sumOfAmounts: sumOfAmounts,
+            totalPrice: totalPrice,
         });
     }
 
-    removeItem = price => {
+    removeItem = (price, amount, idx) => {
+        var amountOfItems = this.state.amountOfItems
+        var sumOfAmounts = this.state.sumOfAmounts
+        var totalPrice = this.state.totalPrice
+        if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
+        sumOfAmounts -= amountOfItems[idx]
+        totalPrice -= amountOfItems[idx] * price
+        amountOfItems[idx] = Math.max(0, amountOfItems[idx] - amount)
+        sumOfAmounts += amountOfItems[idx]
+        totalPrice += amountOfItems[idx] * price
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
-            totalPrice: this.state.totalPrice - price,
+            amountOfItems: amountOfItems,
+            sumOfAmounts: sumOfAmounts,
+            totalPrice: totalPrice,
         });
     }
 
@@ -45,7 +66,7 @@ class ShoppingBasket extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                             textAlign: 'center'}}>
-                            <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
+                            <CartSummary numberOfSelectedItems={this.state.sumOfAmounts}
                                          totalPrice={this.state.totalPrice}/>
                         </div>
                     </div>
