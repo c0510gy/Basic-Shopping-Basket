@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {gql} from 'apollo-boost';
 import {Query} from "react-apollo";
-import {Container, Row, Col, Card, Button} from 'react-bootstrap';
+import {Container, Row, Col, Card, Button, InputGroup, Form} from 'react-bootstrap';
 import {getCurrencyRate} from 'currencies-exchange-rates';
 import NumberFormat from "react-number-format";
 
@@ -19,27 +19,43 @@ class ItemList extends Component {
         super(props);
 
         const items = [];
-        const selected = [];
+        const amount = [];
         const currency = [];
         this.state = {
             items: items,
             currency: currency,
         };
-        this.selected = selected;
+        this.amount = amount;
         this.rate = 0.001;
     }
 
-    itemClicked = event => {
+    itemAdd = event => {
         const idx = event.target.getAttribute('id');
-        if(this.selected[idx]) {
-            this.props.removeItem(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'primary')
-        }else {
-            this.props.addItems(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'secondary')
-        }
+        var amt = parseInt(this.amount[idx].value);
+        if(isNaN(amt)) amt = 0;
+        alert(amt)
+        this.props.addItems(this.state.items[idx].price, amt, idx);
+        // amount[idx] = 10
+        // this.setState({
+        //     amount: amount
+        // }, () => alert(amount[idx] + '개 담았습니다'));
+        // this.state.amount[idx] = 10
+        // alert('asdf')
+        // conat amt = event.target.parentNode.getElementsByTagName('')
+        // const amt = event.
+        // if(this.selected[idx]) {
+        //     this.props.removeItem(this.state.items[idx].price);
+        //     event.target.setAttribute('variant', 'primary')
+        // }else {
+        //     this.props.addItems(this.state.items[idx].price);
+        //     event.target.setAttribute('variant', 'secondary')
+        // }
 
-        this.selected[idx] = !this.selected[idx];
+        // this.selected[idx] = !this.selected[idx];
+    }
+
+    itemRemove = event => {
+
     }
 
     currencyConvert = async event => {
@@ -67,11 +83,21 @@ class ItemList extends Component {
                         <br />
                         <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
                     </Card.Text>
-                    <Button variant={
+                    <InputGroup className="mb-3">
+                        {/* <Form.FormControl
+                            placeholder="Recipient's username"
+                        /> */}
+                        <Form.Control type="number" id={i} placeholder="개수 입력" ref={(ref) => { this.amount[i] = ref; return true; }}/>
+                        <InputGroup.Append>
+                            <Button variant="primary" id={i} onClick={this.itemAdd}>담기</Button>
+                            <Button variant="secondary" id={i} onClick={this.itemRemove}>빼기</Button>
+                        </InputGroup.Append>
+                    </InputGroup>
+                    {/* <Button variant={
                         this.selected[i] ? 'secondary' : 'primary'
                     } id={i} onClick={this.itemClicked}>{
                         this.selected[i] ? 'Remove from cart' : 'Add to cart'
-                    }</Button>
+                    }</Button> */}
                 </Card.Body>
                 </Card>
             </Col>
