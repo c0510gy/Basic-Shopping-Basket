@@ -19,27 +19,27 @@ class ItemList extends Component {
         super(props);
 
         const items = [];
-        const selected = [];
         const currency = [];
         this.state = {
             items: items,
             currency: currency,
         };
-        this.selected = selected;
         this.rate = 0.001;
     }
 
-    itemClicked = event => {
+    addItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        if(this.selected[idx]) {
-            this.props.removeItem(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'primary')
-        }else {
-            this.props.addItems(this.state.items[idx].price);
-            event.target.setAttribute('variant', 'secondary')
-        }
+        this.props.addItems(idx, this.state.items[idx].price);
+    }
 
-        this.selected[idx] = !this.selected[idx];
+    removeItemClicked = event => {
+        const idx = event.target.getAttribute('id');
+        this.props.removeItem(idx, this.state.items[idx].price);
+    }
+
+    setItemClicked = event => {
+        const idx = event.target.getAttribute('id');
+        this.props.setSelectedElement(idx, this.state.items[idx].price);
     }
 
     currencyConvert = async event => {
@@ -66,12 +66,12 @@ class ItemList extends Component {
                         <NumberFormat value={this.state.items[i].price * (this.state.currency[i] ? this.rate : 1)} displayType={'text'} thousandSeparator={true} prefix={this.state.currency[i] ? '$' : '₩'} />
                         <br />
                         <Button variant="link" style={{padding: '0'}} id={i} onClick={this.currencyConvert}>{this.state.currency[i] ? 'Convert To KRW' : 'Convert To USD'}</Button>
+                        <br />
+                        개수: {this.props.getSelectedElement(i)}
+                        <Button id={i} onClick={this.setItemClicked}>{'setValue'}</Button>
                     </Card.Text>
-                    <Button variant={
-                        this.selected[i] ? 'secondary' : 'primary'
-                    } id={i} onClick={this.itemClicked}>{
-                        this.selected[i] ? 'Remove from cart' : 'Add to cart'
-                    }</Button>
+                    <Button variant={'primary'} id={i} onClick={this.addItemClicked}>{'Add to cart'}</Button>
+                    <Button variant={'secondary'} id={i} onClick={this.removeItemClicked}>{'Remove from cart'}</Button>
                 </Card.Body>
                 </Card>
             </Col>
@@ -89,10 +89,10 @@ class ItemList extends Component {
                            const selected = [];
                            const currency = [];
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(false);
+                               selected.push(0);
                                currency.push(false);
                            }
-                           this.selected = selected;
+                           this.props.initSelected(selected);
                            this.setState({
                                items: data.getItems,
                                currency: currency,

@@ -8,24 +8,80 @@ class ShoppingBasket extends Component {
     constructor(props) {
         super(props);
 
+        const selected = [];
         this.state = {
             numberOfSelectedItems: 0,
             totalPrice: 0,
+            selected: selected,
         };
     }
 
-    addItem = price => {
+    addItem = (idx, price) => {
+        const selected = [];
+        for(let i=0; i<this.state.selected.length; i++){
+            selected.push(this.state.selected[i] + (i==idx?1:0));
+        }
         this.setState({
+            selected: selected,
             numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
             totalPrice: this.state.totalPrice + price,
         });
     }
 
-    removeItem = price => {
+    removeItem = (idx, price) => {
+
+        if(this.state.selected[idx]==0){
+            alert("물건을 -1개로 만드는게 가능하군요? 정말 대다네~");
+            return;
+        }
+
+        const selected = [];
+        for(let i=0; i<this.state.selected.length; i++){
+            selected.push(this.state.selected[i] - (i==idx?1:0));
+        }
         this.setState({
+            selected: selected,
             numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
             totalPrice: this.state.totalPrice - price,
         });
+    }
+
+    initSelected = selected => {
+        this.setState({
+           selected: selected,
+        });
+    }
+
+    getSelectedElement = idx => {
+        return this.state.selected[idx];
+    }
+
+    setSelectedElement = (idx, price) => {
+        const userInput = prompt("몇 개를 장바구니에 담을 것인지 선택하십쇼");
+        const count = parseInt(userInput);
+
+        if(isNaN(count)){
+            alert("숫자를 입력해주세요!!");
+            return;
+        }
+
+        if(count < 0){
+            alert("0 아래로 안덴다고요;;");
+            return;
+        }
+
+        const diff = count - this.state.selected[idx];
+
+        const selected = [];
+        for(let i=0; i<this.state.selected.length; i++){
+            selected.push(i==idx?count:this.state.selected[i]);
+        }
+        this.setState({
+            selected: selected,
+            numberOfSelectedItems: this.state.numberOfSelectedItems + diff,
+            totalPrice: this.state.totalPrice + price * diff,
+        });
+
     }
 
     render() {
@@ -38,7 +94,10 @@ class ShoppingBasket extends Component {
                         height: '100vh'}}>
                         <div style={{width: '80%', overflowY: 'scroll'}}>
                             <ItemList addItems={this.addItem}
-                                      removeItem={this.removeItem}/>
+                                      removeItem={this.removeItem}
+                                      initSelected={this.initSelected}
+                                      getSelectedElement={this.getSelectedElement}
+                                      setSelectedElement={this.setSelectedElement}/>
                         </div>
                         <div style={{flex: 1,
                             display: 'flex',
