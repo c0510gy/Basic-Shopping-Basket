@@ -43,7 +43,7 @@ class ItemList extends Component {
         let amt = parseInt(this.amount[idx].value);
         const items = this.state.items;
         if(isNaN(amt)) alert("개수는 숫자로 입력하세요")
-        else if(amt < 0) alert("최소 1개 이상 담아야 합니다")
+        else if(amt < 0) alert("최소 1개 이상 빼야 합니다")
         else this.props.removeItem(items[idx].price, amt, idx);
     }
 
