@@ -76,7 +76,7 @@ class ItemList extends Component {
                         {/* <Form.FormControl
                             placeholder="Recipient's username"
                         /> */}
-                        <Form.Control type="number" id={i} placeholder="개수 입력" ref={(ref) => { this.amount[i] = ref; return true; }}/>
+                        <Form.Control type="number" id={i} placeholder="개수 입력" ref={(ref) => { this.amount[i] = ref; }}/>
                         <InputGroup.Append>
                             <Button variant="primary" id={i} onClick={this.itemAdd}>담기</Button>
                             <Button variant="secondary" id={i} onClick={this.itemRemove}>빼기</Button>
