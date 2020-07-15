@@ -35,7 +35,7 @@ class ItemList extends Component {
         const items = this.state.items;
         if(isNaN(amt)) alert("개수는 숫자로 입력하세요")
         else if(amt < 0) alert("최소 1개 이상 담아야 합니다")
-        else this.props.addItems(this.state.items[idx].price, amt, idx);
+        else this.props.addItems(items[idx].price, amt, idx);
     }
 
     itemRemove = event => {
@@ -44,7 +44,7 @@ class ItemList extends Component {
         const items = this.state.items;
         if(isNaN(amt)) alert("개수는 숫자로 입력하세요")
         else if(amt < 0) alert("최소 1개 이상 담아야 합니다")
-        else this.props.removeItem(this.state.items[idx].price, amt, idx);
+        else this.props.removeItem(items[idx].price, amt, idx);
     }
 
     currencyConvert = async event => {
