@@ -16,9 +16,9 @@ class ShoppingBasket extends Component {
     }
 
     addItem = (price, amount, idx) => {
-        var amountOfItems = this.state.amountOfItems
-        var sumOfAmounts = this.state.sumOfAmounts
-        var totalPrice = this.state.totalPrice
+        let amountOfItems = this.state.amountOfItems
+        let sumOfAmounts = this.state.sumOfAmounts
+        let totalPrice = this.state.totalPrice
         if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
         sumOfAmounts -= amountOfItems[idx]
         totalPrice -= amountOfItems[idx] * price
@@ -33,9 +33,9 @@ class ShoppingBasket extends Component {
     }
 
     removeItem = (price, amount, idx) => {
-        var amountOfItems = this.state.amountOfItems
-        var sumOfAmounts = this.state.sumOfAmounts
-        var totalPrice = this.state.totalPrice
+        let amountOfItems = this.state.amountOfItems
+        let sumOfAmounts = this.state.sumOfAmounts
+        let totalPrice = this.state.totalPrice
         if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
         sumOfAmounts -= amountOfItems[idx]
         totalPrice -= amountOfItems[idx] * price
