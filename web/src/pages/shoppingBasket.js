@@ -9,22 +9,40 @@ class ShoppingBasket extends Component {
         super(props);
 
         this.state = {
-            numberOfSelectedItems: 0,
+            amountOfItems: [],
+            sumOfAmounts: 0,
             totalPrice: 0,
         };
     }
 
-    addItem = price => {
+    addItem = (price, amount, idx) => {
+        const amountOfItems = [...this.state.amountOfItems]
+        let sumOfAmounts = this.state.sumOfAmounts
+        let totalPrice = this.state.totalPrice
+        if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
+        amountOfItems[idx] += amount
+        sumOfAmounts += amount
+        totalPrice += amount * price
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
-            totalPrice: this.state.totalPrice + price,
+            amountOfItems: amountOfItems,
+            sumOfAmounts: sumOfAmounts,
+            totalPrice: totalPrice,
         });
     }
 
-    removeItem = price => {
+    removeItem = (price, amount, idx) => {
+        const amountOfItems = [...this.state.amountOfItems]
+        let sumOfAmounts = this.state.sumOfAmounts
+        let totalPrice = this.state.totalPrice
+        if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
+        const real_amount = Math.min(amountOfItems[idx], amount)
+        amountOfItems[idx] -= real_amount
+        sumOfAmounts -= real_amount
+        totalPrice -= real_amount * price
         this.setState({
-            numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
-            totalPrice: this.state.totalPrice - price,
+            amountOfItems: amountOfItems,
+            sumOfAmounts: sumOfAmounts,
+            totalPrice: totalPrice,
         });
     }
 
@@ -45,7 +63,7 @@ class ShoppingBasket extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                             textAlign: 'center'}}>
-                            <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
+                            <CartSummary numberOfSelectedItems={this.state.sumOfAmounts}
                                          totalPrice={this.state.totalPrice}/>
                         </div>
                     </div>
