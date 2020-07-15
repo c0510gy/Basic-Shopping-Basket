@@ -22,7 +22,7 @@ class ShoppingBasket extends Component {
         if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
         sumOfAmounts -= amountOfItems[idx]
         totalPrice -= amountOfItems[idx] * price
-        amountOfItems[idx] = amountOfItems[idx] + amount
+        amountOfItems[idx] += amount
         sumOfAmounts += amountOfItems[idx]
         totalPrice += amountOfItems[idx] * price
         this.setState({
