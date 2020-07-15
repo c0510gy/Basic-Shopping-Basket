@@ -20,11 +20,9 @@ class ShoppingBasket extends Component {
         let sumOfAmounts = this.state.sumOfAmounts
         let totalPrice = this.state.totalPrice
         if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
-        sumOfAmounts -= amountOfItems[idx]
-        totalPrice -= amountOfItems[idx] * price
         amountOfItems[idx] += amount
-        sumOfAmounts += amountOfItems[idx]
-        totalPrice += amountOfItems[idx] * price
+        sumOfAmounts += amount
+        totalPrice += amount * price
         this.setState({
             amountOfItems: amountOfItems,
             sumOfAmounts: sumOfAmounts,
@@ -37,11 +35,10 @@ class ShoppingBasket extends Component {
         let sumOfAmounts = this.state.sumOfAmounts
         let totalPrice = this.state.totalPrice
         if(isNaN(parseInt(amountOfItems[idx]))) amountOfItems[idx] = 0
-        sumOfAmounts -= amountOfItems[idx]
-        totalPrice -= amountOfItems[idx] * price
-        amountOfItems[idx] = Math.max(0, amountOfItems[idx] - amount)
-        sumOfAmounts += amountOfItems[idx]
-        totalPrice += amountOfItems[idx] * price
+        const real_amount = Math.min(amountOfItems[idx], amount)
+        amountOfItems[idx] -= real_amount
+        sumOfAmounts -= real_amount
+        totalPrice -= real_amount * price
         this.setState({
             amountOfItems: amountOfItems,
             sumOfAmounts: sumOfAmounts,
