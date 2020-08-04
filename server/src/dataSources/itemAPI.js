@@ -7,6 +7,7 @@ const itemsAttributes = [
     'name',
     'price',
     'imgUrl',
+    'selected',
 ];
 
 class ItemAPI extends DataSource {
@@ -42,6 +43,19 @@ class ItemAPI extends DataSource {
             ret.push(items[i].dataValues);
         }
         return ret;
+    }
+
+    async setAllItems(selectedInfo) {
+        for(let i = 0; i < selectedInfo.length; i++) {
+            await this.store.Items.update(
+                {selected: selectedInfo[i]},
+                {where: {id: i + 1}}
+            ).catch(err => {
+                console.error(err);
+                return false;
+            });
+        }
+        return true;
     }
 }
 

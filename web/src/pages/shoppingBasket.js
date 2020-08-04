@@ -9,26 +9,26 @@ class ShoppingBasket extends Component {
         super(props);
 
         const selected = [];
+        const itemsInfo = [];
         this.state = {
-            numberOfSelectedItems: 0,
             totalPrice: 0,
             selected: selected,
+            itemsInfo: itemsInfo,
         };
     }
 
-    addItem = (idx, price) => {
+    addItem = idx => {
         const selected = [];
         for(let i=0; i<this.state.selected.length; i++){
-            selected.push(this.state.selected[i] + (i==idx?1:0));
+            selected.push(this.state.selected[i] + (i==idx ? 1 : 0));
         }
         this.setState({
             selected: selected,
-            numberOfSelectedItems: this.state.numberOfSelectedItems + 1,
-            totalPrice: this.state.totalPrice + price,
+            totalPrice: this.state.totalPrice + this.state.itemsInfo[idx].price,
         });
     }
 
-    removeItem = (idx, price) => {
+    removeItem = idx => {
 
         if(this.state.selected[idx]==0){
             alert("물건을 -1개로 만드는게 가능하군요? 정말 대다네~");
@@ -37,18 +37,28 @@ class ShoppingBasket extends Component {
 
         const selected = [];
         for(let i=0; i<this.state.selected.length; i++){
-            selected.push(this.state.selected[i] - (i==idx?1:0));
+            selected.push(this.state.selected[i] - (i==idx ? 1 : 0));
         }
         this.setState({
             selected: selected,
-            numberOfSelectedItems: this.state.numberOfSelectedItems - 1,
-            totalPrice: this.state.totalPrice - price,
+            totalPrice: this.state.totalPrice - this.state.itemsInfo[idx].price,
         });
     }
 
-    initSelected = selected => {
+    initInfo = (selected, names, prices) => {
+        let totalPrice = 0;
+        const itemsInfo = [];
+        for(let i=0; i<selected.length; i++){
+            totalPrice += selected[i] * prices[i];
+            itemsInfo.push({
+                'name': names[i],
+                'price': prices[i],
+            });
+        }
         this.setState({
-           selected: selected,
+            selected: selected,
+            totalPrice: totalPrice,
+            itemsInfo: itemsInfo,
         });
     }
 
@@ -56,7 +66,7 @@ class ShoppingBasket extends Component {
         return this.state.selected[idx];
     }
 
-    setSelectedElement = (idx, price) => {
+    setSelectedElement = idx => {
         const userInput = prompt("몇 개를 장바구니에 담을 것인지 선택하십쇼");
         const count = parseInt(userInput);
 
@@ -74,12 +84,12 @@ class ShoppingBasket extends Component {
 
         const selected = [];
         for(let i=0; i<this.state.selected.length; i++){
-            selected.push(i==idx?count:this.state.selected[i]);
+            selected.push(i==idx ? count : this.state.selected[i]);
         }
         this.setState({
             selected: selected,
             numberOfSelectedItems: this.state.numberOfSelectedItems + diff,
-            totalPrice: this.state.totalPrice + price * diff,
+            totalPrice: this.state.totalPrice + this.state.itemsInfo[idx].price * diff,
         });
 
     }
@@ -95,7 +105,7 @@ class ShoppingBasket extends Component {
                         <div style={{width: '80%', overflowY: 'scroll'}}>
                             <ItemList addItems={this.addItem}
                                       removeItem={this.removeItem}
-                                      initSelected={this.initSelected}
+                                      initInfo={this.initInfo}
                                       getSelectedElement={this.getSelectedElement}
                                       setSelectedElement={this.setSelectedElement}/>
                         </div>
@@ -104,8 +114,9 @@ class ShoppingBasket extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                             textAlign: 'center'}}>
-                            <CartSummary numberOfSelectedItems={this.state.numberOfSelectedItems}
-                                         totalPrice={this.state.totalPrice}/>
+                            <CartSummary totalPrice={this.state.totalPrice}
+                                         selected={this.state.selected}
+                                         itemsInfo={this.state.itemsInfo}/>
                         </div>
                     </div>
                 </Row>

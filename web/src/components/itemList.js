@@ -10,7 +10,8 @@ const GET_ITEMS_QUERY = gql`
         getItems{
             name,
             price,
-            imgUrl
+            imgUrl,
+            selected,
         }
     }`;
 
@@ -29,17 +30,17 @@ class ItemList extends Component {
 
     addItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        this.props.addItems(idx, this.state.items[idx].price);
+        this.props.addItems(idx);
     }
 
     removeItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        this.props.removeItem(idx, this.state.items[idx].price);
+        this.props.removeItem(idx);
     }
 
     setItemClicked = event => {
         const idx = event.target.getAttribute('id');
-        this.props.setSelectedElement(idx, this.state.items[idx].price);
+        this.props.setSelectedElement(idx);
     }
 
     currencyConvert = async event => {
@@ -88,11 +89,15 @@ class ItemList extends Component {
                        onCompleted={data => {
                            const selected = [];
                            const currency = [];
+                           const names = [];
+                           const prices = [];
                            for(let i = 0; i < data.getItems.length; i++) {
-                               selected.push(0);
+                               selected.push(data.getItems[i].selected);
                                currency.push(false);
+                               names.push(data.getItems[i].name);
+                               prices.push(data.getItems[i].price);
                            }
-                           this.props.initSelected(selected);
+                           this.props.initInfo(selected, names, prices);
                            this.setState({
                                items: data.getItems,
                                currency: currency,
