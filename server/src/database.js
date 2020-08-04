@@ -25,6 +25,7 @@ const createStore = (force=false) => {
         name: Sequelize.TEXT,
         price: Sequelize.INTEGER,
         imgUrl: Sequelize.TEXT,
+        selected: Sequelize.INTEGER,
     },
     {
         sequelize,

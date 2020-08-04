@@ -5,9 +5,13 @@ const typeDefs = gql`
         name: String!
         price: Int!
         imgUrl: String!
+        selected: Int!
     }
     type Query {
         getItems: [Item]!
+    }
+    type Mutation {
+        setItems(selectedInfo: [Int]!): Boolean!
     }
 `;
 
